@@ -21,7 +21,7 @@ two_pi = 2.0 * math.pi
 print("frequency  ", frequency)
 
 
-spot = vector(0,1,0)
+spot = vector(0,2,0)
 
 
 sources = []
@@ -38,7 +38,7 @@ for index in range(13):
 
 
 db_min = 45
-db_max = 55
+db_max = 50
 
 
 vertices = []
