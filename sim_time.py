@@ -49,7 +49,8 @@ for y in np.arange(-xmax, xmax, dy):
         vertices.append(vert)
 
 
-dt = 100.0 / frequency
+#dt = 100.0 / frequency
+dt = 10.0 / frequency
 t = 0
 
 for time_counter in range(1000):
@@ -88,6 +89,7 @@ for time_counter in range(1000):
         green = (decibels - 32.0) / 20.0
         
         vert.color = vector(0, green, 0)
+    scene.capture("beat" + str(time_counter + 1000))
     print(t)
     time.sleep(1)
     t += dt
