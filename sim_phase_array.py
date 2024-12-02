@@ -56,35 +56,45 @@ for y in np.arange(-xmax, xmax, dy):
 
 
 
-for vert in vertices:
-    # Sum up contribution from all sources at this vertex
-    total_vx = 0
-    total_vy = 0
-    for source in sources:
-        # phase and amplitude change.
-        dist = mag(vert.pos - source.pos)
-        dist = max(dist, source.radius)
-        amplitude  = source.amplitude / (dist**2)
-        phase = source.phase 
-        #phase += two_pi * source.frequency * t
-        phase += two_pi * dist * source.frequency / speed_of_sound
-        # Add up the vectors.
-        source_vx = amplitude * cos(phase)
-        source_vy = amplitude * sin(phase)
-        total_vx += source_vx 
-        total_vy += source_vy 
-    vmag = math.sqrt(total_vx**2 + total_vy**2)
-        
-    # Plot decibels.
-    decibels = 10 * math.log10(vmag / I0)
-    decibel_max = max(decibel_max, decibels)
-    decibel_min = min(decibel_min, decibels)
-    #print(x, " ", y, " : dist ", dist_1, "  mag:", decibels)
-    #print(x, " ", y, " : dist ", dist_1, " ", dist_2, "  amp: ", amplitude_1, "  ", amplitude_2)
 
-    # Scale the color range to see interference pattern.
-    green = (decibels - db_min) / (db_max - db_min)
+# animate the direction
+for dir_x in range(30):
+    # change the phases
+    spot.x = (dir_x / 10) - 1.5
+    for source in sources:
+        source.phase = - two_pi * dist * frequency / speed_of_sound
+        dist = mag(spot - source.pos)
+    
+    for vert in vertices:
+        # Sum up contribution from all sources at this vertex
+        total_vx = 0
+        total_vy = 0
+        for source in sources:
+            # phase and amplitude change.
+            dist = mag(vert.pos - source.pos)
+            dist = max(dist, source.radius)
+            amplitude  = source.amplitude / (dist**2)
+            phase = source.phase 
+            #phase += two_pi * source.frequency * t
+            phase += two_pi * dist * source.frequency / speed_of_sound
+            # Add up the vectors.
+            source_vx = amplitude * cos(phase)
+            source_vy = amplitude * sin(phase)
+            total_vx += source_vx 
+            total_vy += source_vy 
+        vmag = math.sqrt(total_vx**2 + total_vy**2)
         
-    vert.color = vector(0, green, 0)
+        # Plot decibels.
+        decibels = 10 * math.log10(vmag / I0)
+        decibel_max = max(decibel_max, decibels)
+        decibel_min = min(decibel_min, decibels)
+        #print(x, " ", y, " : dist ", dist_1, "  mag:", decibels)
+        #print(x, " ", y, " : dist ", dist_1, " ", dist_2, "  amp: ", amplitude_1, "  ", amplitude_2)
+
+        # Scale the color range to see interference pattern.
+        green = (decibels - db_min) / (db_max - db_min)
+        
+        vert.color = vector(0, green, 0)
+    sleep(1)
 
 
