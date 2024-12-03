@@ -30,13 +30,6 @@ sources = []
 
 
 
-for index in range(13):
-    source = simple_sphere(pos=vector(-3+(index*0.5),-3-3,0), color=color.red, radius=0.25)
-    # Phase and amplitude.
-    source.amplitude = amplitude
-    source.frequency = frequency
-
-
 source = simple_sphere(pos=vector(-2,-3,0), color=color.red, radius=0.25)
 # Phase and amplitude.
 source.amplitude = amplitude
@@ -65,6 +58,7 @@ decibel_min = 351
 for y in np.arange(-xmax, xmax, dy):
     for x in np.arange(-xmax, xmax, dx):
         vert = box(pos=vector(x,y,0), size=vector(dx,dy,0.01))
+        vert.shininess = 0.0
         vertices.append(vert)
 
 
