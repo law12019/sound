@@ -21,13 +21,13 @@ two_pi = 2.0 * math.pi
 print("frequency  ", frequency)
 
 
-spot = vector(0,2,0)
+spot = vector(0,9,0)
 
 
 sources = []
 
 for index in range(13):
-    source = simple_sphere(pos=vector(-3+(index*0.5),-3,0), color=color.red, radius=0.25)
+    source = simple_sphere(pos=vector(-3+(index*0.5),-6,0), color=color.red, radius=0.25)
     # Phase and amplitude.
     source.amplitude = amplitude
     source.frequency = frequency
@@ -46,11 +46,14 @@ dx = 0.1
 dy = 0.1
 xmax = 3
 
+scene.lights[0].pos.x = 10
+scene.lights[1].pos.x = 10
+
 decibel_max = 0
 decibel_min = 351
 
-for y in np.arange(-xmax, xmax, dy):
-    for x in np.arange(-xmax, xmax, dx):
+for y in np.arange(-6, 4, dy):
+    for x in np.arange(-xmax-3, xmax+3, dx):
         vert = box(pos=vector(x,y,0), size=vector(dx,dy,0.01))
         vertices.append(vert)
 
@@ -59,11 +62,13 @@ for y in np.arange(-xmax, xmax, dy):
 
 # animate the direction
 for dir_x in range(30):
+    green_min = 10000
+    green_max = 0
     # change the phases
-    spot.x = (dir_x / 10) - 1.5
+    spot.x = (dir_x / 2) - 7
     for source in sources:
-        source.phase = - two_pi * dist * frequency / speed_of_sound
         dist = mag(spot - source.pos)
+        source.phase = - two_pi * dist * frequency / speed_of_sound
     
     for vert in vertices:
         # Sum up contribution from all sources at this vertex
@@ -92,9 +97,15 @@ for dir_x in range(30):
         #print(x, " ", y, " : dist ", dist_1, " ", dist_2, "  amp: ", amplitude_1, "  ", amplitude_2)
 
         # Scale the color range to see interference pattern.
-        green = (decibels - db_min) / (db_max - db_min)
-        
+        # print(vert.pos.y)    y goes from -6 to 0
+        green = (decibels*((vert.pos.y + 40)/37) - db_min) / (db_max - db_min)
+        #green = (decibels - db_min) / (db_max - db_min)
+        green_min = min(green_min, green)
+        green_max = max(green_max, green)
+
         vert.color = vector(0, green, 0)
+
+    print(green_min, "  ", green_max)
     sleep(1)
 
 
