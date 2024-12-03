@@ -112,7 +112,7 @@ for dir_x in range(60):
         green_min = min(green_min, green)
         green_max = max(green_max, green)
 
-        vert.color = vector(0, green, 0)
+        vert.color = vector(0, green, green)
 
     #pdb.set_trace()
     print(green_min, "  ", green_max)
