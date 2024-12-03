@@ -59,6 +59,7 @@ decibel_min = 351
 for y in np.arange(-xmax, xmax, dy):
     for x in np.arange(-xmax, xmax, dx):
         vert = box(pos=vector(x,y,0), size=vector(dx,dy,0.01))
+        vert.shininess = 0.0
         vertices.append(vert)
 
 
