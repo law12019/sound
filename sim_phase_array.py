@@ -27,7 +27,7 @@ spot = vector(0,9,0)
 sources = []
 
 for index in range(13):
-    source = simple_sphere(pos=vector(-3+(index*0.5),-6,0), color=color.red, radius=0.25)
+    source = simple_sphere(pos=vector((index*0.5-3),0.5,0), color=color.red, radius=0.25)
     # Phase and amplitude.
     source.amplitude = amplitude
     source.frequency = frequency
@@ -37,8 +37,8 @@ for index in range(13):
     sources.append(source)
 
 
-db_min = 45
-db_max = 50
+db_min = 48
+db_max = 54
 
 
 vertices = []
@@ -46,26 +46,33 @@ dx = 0.1
 dy = 0.1
 xmax = 3
 
-scene.lights[0].pos.x = 10
-scene.lights[1].pos.x = 10
 
 decibel_max = 0
 decibel_min = 351
 
-for y in np.arange(-6, 4, dy):
-    for x in np.arange(-xmax-3, xmax+3, dx):
+for y in np.arange(0, 12, dy):
+    for x in np.arange(-xmax-6, xmax+6, dx):
         vert = box(pos=vector(x,y,0), size=vector(dx,dy,0.01))
+        vert.shininess = 0.0
         vertices.append(vert)
 
+scene.autoscale = False
+scene.camera.axis = vector(0, 0, -1)
+scene.camera.pos = vector(0, 6, 10)
+scene.camera.up = vector(0, 1, 0)
 
 
 
 # animate the direction
-for dir_x in range(30):
+for dir_x in range(60):
     green_min = 10000
     green_max = 0
-    # change the phases
-    spot.x = (dir_x / 2) - 7
+    # change the phases.  Move the beam back and forth
+    if dir_x < 30:
+        spot.x = (dir_x / 2) - 7
+    else:
+        spot.x = ((60-dir_x) / 2) - 7
+        
     for source in sources:
         dist = mag(spot - source.pos)
         source.phase = - two_pi * dist * frequency / speed_of_sound
@@ -78,7 +85,9 @@ for dir_x in range(30):
             # phase and amplitude change.
             dist = mag(vert.pos - source.pos)
             dist = max(dist, source.radius)
-            amplitude  = source.amplitude / (dist**2)
+            #amplitude  = source.amplitude / (dist**2)
+            # Use a 2d simulation to show the beam better (it will not decrease with distance).
+            amplitude  = source.amplitude / (dist)
             phase = source.phase 
             #phase += two_pi * source.frequency * t
             phase += two_pi * dist * source.frequency / speed_of_sound
@@ -98,13 +107,14 @@ for dir_x in range(30):
 
         # Scale the color range to see interference pattern.
         # print(vert.pos.y)    y goes from -6 to 0
-        green = (decibels*((vert.pos.y + 40)/37) - db_min) / (db_max - db_min)
-        #green = (decibels - db_min) / (db_max - db_min)
+        #green = (decibels*((vert.pos.y + 40)/37) - db_min) / (db_max - db_min)
+        green = (decibels - db_min) / (db_max - db_min)
         green_min = min(green_min, green)
         green_max = max(green_max, green)
 
         vert.color = vector(0, green, 0)
 
+    #pdb.set_trace()
     print(green_min, "  ", green_max)
     sleep(1)
 
