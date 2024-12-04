@@ -10,10 +10,10 @@ import time
 # ffmpeg -framerate 30 -pattern_type glob -i '*.png' -c:v libx264 -pix_fmt yuv420p out.mp4
 
 
-#I0 = 1.0e-12          # W/m^2
-I0 = 1.0e-6          # W/m^2
+I0 = 1.0e-12          # W/m^2
+#I0 = 1.0e-6          # W/m^2
 
-amplitude = 0.1     # units.
+amplitude = 0.1 * 1e-6     # units.
 phase = 0             # radians
 wavelength = 2.0      # m/cycle
 speed_of_sound = 343  # m/s
@@ -137,7 +137,7 @@ for frame_idx in range(number_of_frames):
         vert.color = vector(0, green, green)
 
     #pdb.set_trace()
-    scene.capture(f"frame{frame_number:05}")
+    #scene.capture(f"frame{frame_number:05}")
     print(frame_idx, "  ", frame_number)
     frame_number += 1
     print(green_min, "  ", green_max)
