@@ -9,10 +9,10 @@ import time
 
 
 
-#I0 = 1.0e-12          # W/m^2
-I0 = 1.0e-6          # W/m^2
+I0 = 1.0e-12          # W/m^2
+#I0 = 1.0e-6          # W/m^2
 
-amplitude = 0.1     # units.
+amplitude = 0.1 * 1e-6     # units.
 phase = 0             # radians
 wavelength = 2.0      # m/cycle
 speed_of_sound = 343  # m/s
@@ -134,7 +134,7 @@ for time_counter in range(number_of_frames):
             vert.color = vector(0, 0, green)
     #db.set_trace()
     print()
-    scene.capture(f"frame{frame_number:05}")
+    #scene.capture(f"frame{frame_number:05}")
     print(time_counter, "  ", frame_number, "  ", t)
     print(two_pi * source.frequency * t)
     toggle = not toggle
